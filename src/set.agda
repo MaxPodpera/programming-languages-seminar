@@ -1,4 +1,9 @@
-module CanonicalBinaryTrie.OP.get where 
+open import Data.Maybe
+
+open import Positive
+open import CanonicalBinaryTrie
+
+module set where 
     {- Set Version1 -}
     set0 : {A : Set} -> Positive -> A -> Tree_I A
     set0 xH v = node010 v 
@@ -30,6 +35,6 @@ module CanonicalBinaryTrie.OP.get where
     set_ (xI q) v (node110 l v1 )= node111 l v1 (set0 q v)
     set_ (xI q) v (node111 l v1 r )= node111 l v1 (set_ q v r)
 
-    set : {A : Set} -> Positive -> A -> Tree A -> Tree A
-    set p v Empty = Nodes (set0 p v)
-    set p v (Nodes m) = Nodes (set_ p v m)
+    set1 : {A : Set} -> Positive -> A -> Tree A -> Tree A
+    set1 p v Empty = Nodes (set0 p v)
+    set1 p v (Nodes m) = Nodes (set_ p v m)
