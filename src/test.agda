@@ -14,13 +14,13 @@ open import Data.List
 exampleTrie : Tree Nat
 exampleTrie = 
     let 
-        trie1 = set1 one 1 Empty
-        trie2 = set1 three 3 trie1
-        trie3 = set1 thirteen 13 trie2
-        trie4 = set1 four 4 trie3
-        trie5 = set1 eleven 11 trie4
-        trie6 = set1 five 5 trie5
-        trie7 = set1 fourteen 14 trie6
+        trie1 = set one 1 Empty
+        trie2 = set three 3 trie1
+        trie3 = set thirteen 13 trie2
+        trie4 = set four 4 trie3
+        trie5 = set eleven 11 trie4
+        trie6 = set five 5 trie5
+        trie7 = set fourteen 14 trie6
     in
         trie7
 
@@ -30,7 +30,7 @@ toNat (just a) = a
 
 testPattern : List Positive -> Tree Nat -> List Nat
 testPattern [] trie = []
-testPattern (x ∷ xs) trie = ((toNat (get1 x trie)) ∷ []) ++ (testPattern xs trie)
+testPattern (x ∷ xs) trie = ((toNat (get x trie)) ∷ []) ++ (testPattern xs trie)
 
 square : Nat -> Maybe Nat
 square n = just ( n * n )
