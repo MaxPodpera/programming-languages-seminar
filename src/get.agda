@@ -1,4 +1,5 @@
 open import Data.Maybe
+open import Data.Bool
 open import Positive
 open import CanonicalBinaryTrie
 
@@ -6,7 +7,7 @@ module get where
 
 
     {- Get Version1 -}
-    get' : {A : Set} -> Positive -> Tree_I A -> Maybe A 
+    get' : {A : Set} -> Positive -> Tree' A -> Maybe A 
     get' xH (node001 _ ) = nothing
     get' xH (node010 v ) = just v 
     get' xH (node011 v _ ) = just v
@@ -34,4 +35,4 @@ module get where
 
     get : {A : Set} -> Positive -> Tree A -> Maybe A
     get _ Empty = nothing
-    get p (Nodes n) = get' p n 
+    get p (Nodes n) = get' p n

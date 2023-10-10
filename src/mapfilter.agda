@@ -2,7 +2,7 @@ open import Data.Maybe
 open import CanonicalBinaryTrie
 
 
-mapFilter' : {A B : Set} -> (A -> Maybe B) -> Tree_I A -> Tree B
+mapFilter' : {A B : Set} -> (A -> Maybe B) -> Tree' A -> Tree B
 mapFilter' f (node001 r) = node Empty nothing (mapFilter' f r)
 mapFilter' f (node010 v) = node Empty (f v) Empty
 mapFilter' f (node011 v r) = node Empty (f v) (mapFilter' f r)

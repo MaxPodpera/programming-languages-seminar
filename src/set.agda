@@ -5,12 +5,13 @@ open import CanonicalBinaryTrie
 
 module set where 
 
-    set0 : {A : Set} -> Positive -> A -> Tree_I A
+    set0 : {A : Set} -> Positive -> A -> Tree' A
     set0 xH v = node010 v 
-    set0 (xI q) v = node001 (set0 q v)
     set0 (xO q) v = node100 (set0 q v)
+    set0 (xI q) v = node001 (set0 q v)
 
-    set' : {A : Set} -> Positive -> A -> Tree_I A -> Tree_I A
+
+    set' : {A : Set} -> Positive -> A -> Tree' A -> Tree' A
     set' xH v (node001 r )= node011 v r 
     set' xH v (node010 _ )= node010 v 
     set' xH v (node011 _ r )= node011 v r 
