@@ -5,8 +5,6 @@ open import CanonicalBinaryTrie
 
 module get where 
 
-
-    {- Get Version1 -}
     get' : {A : Set} -> Positive -> Tree' A -> Maybe A 
     get' xH (node001 _ ) = nothing
     get' xH (node010 v ) = just v 
