@@ -3,10 +3,17 @@ open import CanonicalBinaryTrie
 open import get 
 open import set
 
+open import Data.Empty using (⊥; ⊥-elim)
+
 open import Data.Maybe
+open import Relation.Nullary.Negation
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong; cong-app; _≢_)
+open import Data.Bool.Base
+open import Data.Empty
+open import Relation.Nullary.Negation
 open Eq.≡-Reasoning
+
 module proofs where
   {-get i empty = nothing               // gempty -}
   gempty : {A : Set} → ∀ (p : Positive) → get {A = A} p Empty ≡ nothing
@@ -271,13 +278,64 @@ module proofs where
       just v 
     ∎
 
-
-
   {-i != j get i (set j vm) = get i m   // gso (getSetOther)-}
-  gso : {A : Set} -> ∀ (i j : Positive) (t : Tree A) (v : A) → (i j ≡ ∅) → get i (set j v t) ≡ get i t
-  gso xH xH Empty v = {!   !}
-  gso xH xH (Nodes x) v = {!   !}
-  gso xH (xI q) t v = {!   !}
-  gso xH (xO q) t v = {!   !}  
-  gso (xI p) q t v = {!   !} 
-  gso (xO p) q t v = {!   !}   
+  gso : {A : Set} -> ∀ (i j : Positive) (t : Tree A) (v : A) → (i ≢ j) → get i (set j v t) ≡ get i t
+  gso xH xH t v x = {!   !}
+  -- -----------------------
+  gso xH (xI q) Empty v = λ _ → refl
+  gso xH (xI q) (Nodes (node001 x)) v = λ _ → refl
+  gso xH (xI q) (Nodes (node010 x)) v = λ _ → refl
+  gso xH (xI q) (Nodes (node011 x x₁)) v = λ _ → refl
+  gso xH (xI q) (Nodes (node100 x)) v = λ _ → refl
+  gso xH (xI q) (Nodes (node101 x x₁)) v = λ _ → refl
+  gso xH (xI q) (Nodes (node110 x x₁)) v = λ _ → refl
+  gso xH (xI q) (Nodes (node111 x x₁ x₂)) v = λ _ → refl 
+  -- -----------------------
+  gso xH (xO q) Empty v = λ _ → refl
+  gso xH (xO q) (Nodes (node001 x)) v = λ _ → refl
+  gso xH (xO q) (Nodes (node010 x)) v = λ _ → refl
+  gso xH (xO q) (Nodes (node011 x x₁)) v = λ _ → refl
+  gso xH (xO q) (Nodes (node100 x)) v = λ _ → refl
+  gso xH (xO q) (Nodes (node101 x x₁)) v = λ _ → refl
+  gso xH (xO q) (Nodes (node110 x x₁)) v = λ _ → refl
+  gso xH (xO q) (Nodes (node111 x x₁ x₂)) v = λ _ → refl
+  -- -----------------------  
+  gso (xI p) xH Empty v = λ _ → refl
+  gso (xI p) xH (Nodes (node001 x)) v = λ _ → refl
+  gso (xI p) xH (Nodes (node010 x)) v = λ _ → refl
+  gso (xI p) xH (Nodes (node011 x x₁)) v = λ _ → refl
+  gso (xI p) xH (Nodes (node100 x)) v = λ _ → refl
+  gso (xI p) xH (Nodes (node101 x x₁)) v = λ _ → refl
+  gso (xI p) xH (Nodes (node110 x x₁)) v = λ _ → refl
+  gso (xI p) xH (Nodes (node111 x x₁ x₂)) v = λ _ → refl
+  -- -----------------------
+  gso (xI p) (xI q) t v = {!   !}
+  -- -----------------------
+  gso (xI p) (xO q) Empty v = λ _ → refl
+  gso (xI p) (xO q) (Nodes (node001 x)) v = λ _ → refl
+  gso (xI p) (xO q) (Nodes (node010 x)) v = λ _ → refl
+  gso (xI p) (xO q) (Nodes (node011 x x₁)) v = λ _ → refl
+  gso (xI p) (xO q) (Nodes (node100 x)) v = λ _ → refl
+  gso (xI p) (xO q) (Nodes (node101 x x₁)) v = λ _ → refl
+  gso (xI p) (xO q) (Nodes (node110 x x₁)) v = λ _ → refl
+  gso (xI p) (xO q) (Nodes (node111 x x₁ x₂)) v = λ _ → refl
+  -- -----------------------
+  gso (xO p) xH Empty v = λ _ → refl
+  gso (xO p) xH (Nodes (node001 x)) v = λ _ → refl
+  gso (xO p) xH (Nodes (node010 x)) v = λ _ → refl
+  gso (xO p) xH (Nodes (node011 x x₁)) v = λ _ → refl
+  gso (xO p) xH (Nodes (node100 x)) v = λ _ → refl
+  gso (xO p) xH (Nodes (node101 x x₁)) v = λ _ → refl
+  gso (xO p) xH (Nodes (node110 x x₁)) v = λ _ → refl
+  gso (xO p) xH (Nodes (node111 x x₁ x₂)) v = λ _ → refl 
+  -- -----------------------
+  gso (xO p) (xI q) Empty v = λ _ → refl
+  gso (xO p) (xI q) (Nodes (node001 x)) v = λ _ → refl
+  gso (xO p) (xI q) (Nodes (node010 x)) v = λ _ → refl
+  gso (xO p) (xI q) (Nodes (node011 x x₁)) v = λ _ → refl
+  gso (xO p) (xI q) (Nodes (node100 x)) v = λ _ → refl
+  gso (xO p) (xI q) (Nodes (node101 x x₁)) v = λ _ → refl
+  gso (xO p) (xI q) (Nodes (node110 x x₁)) v = λ _ → refl
+  gso (xO p) (xI q) (Nodes (node111 x x₁ x₂)) v = λ _ → refl
+  -- -----------------------     
+  gso (xO p) (xO q) t v = {!   !}
