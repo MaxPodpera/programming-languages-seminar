@@ -1,11 +1,13 @@
 open import Data.Bool
 
+
 module Positive where
+
     data Positive : Set where 
         xH : Positive
         xI : Positive -> Positive
         xO : Positive -> Positive
-
+    
     one : Positive
     one = xH
 
@@ -49,4 +51,4 @@ module Positive where
     fourteen = xO (xI (xI xH))
 
     fifteen : Positive
-    fifteen = xI (xI (xI xH))
+    fifteen = xI (xI (xI xH)) 

@@ -3,22 +3,16 @@ open import CanonicalBinaryTrie
 open import get 
 open import set
 
-open import Data.Empty using (⊥; ⊥-elim)
-
 open import Data.Maybe
-open import Relation.Nullary.Negation
+
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; cong; cong-app; _≢_)
-open import Data.Bool.Base
+open Eq using (_≡_; refl; cong; trans; _≢_)
 open import Data.Empty
-open import Relation.Nullary.Negation
 open Eq.≡-Reasoning
+open import Agda.Builtin.Bool
 
 module proofs where
-  {-get i empty = nothing               // gempty -}
-  gempty : {A : Set} → ∀ (p : Positive) → get {A = A} p Empty ≡ nothing
-  gempty p = refl
-  
+
   proof-2 : {A : Set} → ∀ (p : Positive) (v : A) → get' p (set0 p v) ≡ just v
   proof-2 xH v = refl
   proof-2 (xI p) v = proof-2 p v
@@ -101,6 +95,11 @@ module proofs where
   proof-1 (xO p) v (node110 t x) = proof-1 p v t
   proof-1 (xO p) v (node111 t x t₁) = proof-1 p v t
 
+  {-get i empty = nothing               // gempty -}
+  gempty : {A : Set} → ∀ (p : Positive) → get {A = A} p Empty ≡ nothing
+  gempty p = refl
+
+  {--}
   gss : {A : Set} -> ∀ (p : Positive) (t : Tree A) (v : A) → get p (set {A = A} p v t) ≡ just v
   -- xH
   gss xH Empty v = refl
@@ -279,8 +278,8 @@ module proofs where
     ∎
 
   {-i != j get i (set j vm) = get i m   // gso (getSetOther)-}
-  gso : {A : Set} -> ∀ (i j : Positive) (t : Tree A) (v : A) → (i ≢ j) → get i (set j v t) ≡ get i t
-  gso xH xH t v x = {!   !}
+  gso : {A : Set} -> ∀ (i j : Positive) (t : Tree A) (v : A) → ((i ≡ j) → ⊥) → get i (set j v t) ≡ get i t
+  gso xH xH t v neq = ⊥-elim (neq refl)
   -- -----------------------
   gso xH (xI q) Empty v = λ _ → refl
   gso xH (xI q) (Nodes (node001 x)) v = λ _ → refl
@@ -309,7 +308,50 @@ module proofs where
   gso (xI p) xH (Nodes (node110 x x₁)) v = λ _ → refl
   gso (xI p) xH (Nodes (node111 x x₁ x₂)) v = λ _ → refl
   -- -----------------------
-  gso (xI p) (xI q) t v = {!   !}
+  gso (xI p) (xI q) Empty v neq =
+    {-begin 
+      get (xI p) (set (xI q) v Empty)
+    ≡⟨ cong (p ≡ q) (neq) ⟩
+      get p (set q v Empty)
+    ≡⟨ gso p q Empty v ⟩
+      get p Empty 
+    ≡⟨⟩
+      nothing
+    ∎ -}
+    begin
+      get (xI p) (set (xI q) v Empty)
+    ≡⟨⟩
+      get (xI p) (Nodes (node001 (set0 q v)))
+    ≡⟨ gso (xI p) (xI q) (Nodes (node001 (set0 q v))) ⟩
+      nothing
+    ∎ 
+
+
+
+
+
+
+
+
+  ------------------------
+  {-
+  gso (xI p) (xI q) (Nodes (node001 t)) v neq = 
+    begin 
+      get (xI p) (set (xI q) v (Nodes (node001 t)))
+    ≡⟨⟩
+      get (xI p) (Nodes (node001 (set' q v t)))
+    ≡⟨ cong (xI q) (Nodes (node001 (set' q v t ))) ⟩
+      get p (Nodes (set' q v t))
+    ≡⟨ refl ⟩
+      gso p q (Nodes (set' q v t)) v 
+      get (xI p) (Nodes (node001 (set' q v t )))
+    ∎ -}
+  gso (xI p) (xI q) (Nodes (node010 x)) v = {!   !}
+  gso (xI p) (xI q) (Nodes (node011 x x₁)) v = {!   !}
+  gso (xI p) (xI q) (Nodes (node100 x)) v = {!   !}
+  gso (xI p) (xI q) (Nodes (node101 x x₁)) v = {!   !}
+  gso (xI p) (xI q) (Nodes (node110 x x₁)) v = {!   !}
+  gso (xI p) (xI q) (Nodes (node111 x x₁ x₂)) v = {!   !}
   -- -----------------------
   gso (xI p) (xO q) Empty v = λ _ → refl
   gso (xI p) (xO q) (Nodes (node001 x)) v = λ _ → refl
@@ -338,4 +380,5 @@ module proofs where
   gso (xO p) (xI q) (Nodes (node110 x x₁)) v = λ _ → refl
   gso (xO p) (xI q) (Nodes (node111 x x₁ x₂)) v = λ _ → refl
   -- -----------------------     
-  gso (xO p) (xO q) t v = {!   !}
+  gso (xO p) (xO q) t v neq = {!   !}
+  
