@@ -27,5 +27,3 @@ module CanonicalBinaryTrie where
     node (Nodes l) nothing (Nodes r) = Nodes (node101 l r)
     node (Nodes l) (just v) Empty = Nodes (node110 l v)
     node (Nodes l) (just v) (Nodes r) = Nodes (node111 l v r)
-
-
